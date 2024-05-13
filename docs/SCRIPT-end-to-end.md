@@ -98,7 +98,7 @@ individual artifact can be viewed
 
 ~~~~
 DATAPRODUCT_DIR="$SAMPLES_DIR/dataproducts/rmi";
-ADDRESS="http://bgssrv-dmproduct-0:8000" ;
+ADDRESS="http://osc-dm-product-srv-0:8000" ;
 python ./src/cli.py $VERBOSE --host $HOST --port $PORT products \
     --register \
     --directory "$DATAPRODUCT_DIR" \
@@ -113,7 +113,7 @@ python ./src/cli.py $VERBOSE --host $HOST --port $PORT products \
 python ./src/cli.py $VERBOSE --host $HOST --port $PORT products \
     --retrieve
 
-[{"uuid": "c4c68ca9-a053-4878-acbf-7ee424ab11e6", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://bgssrv-dmproduct-0:8000", "createtimestamp": "2024-03-17 16:26:23.144", "updatetimestamp": "2024-03-17 16:26:23.144"}]
+[{"uuid": "c4c68ca9-a053-4878-acbf-7ee424ab11e6", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://osc-dm-product-srv-0:8000", "createtimestamp": "2024-03-17 16:26:23.144", "updatetimestamp": "2024-03-17 16:26:23.144"}]
 ~~~~
 
 ### Viewing a Product by UUID
@@ -124,7 +124,7 @@ python ./src/cli.py $VERBOSE --host $HOST --port $PORT products \
     --retrieve \
     --uuid "$UUID"
 
-{"uuid": "c4c68ca9-a053-4878-acbf-7ee424ab11e6", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://bgssrv-dmproduct-0:8000", "createtimestamp": "2024-03-17 16:26:23.144", "updatetimestamp": "2024-03-17 16:26:23.144"}
+{"uuid": "c4c68ca9-a053-4878-acbf-7ee424ab11e6", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://osc-dm-product-srv-0:8000", "createtimestamp": "2024-03-17 16:26:23.144", "updatetimestamp": "2024-03-17 16:26:23.144"}
 ~~~~
 
 ### Viewing a Product by Namespace/Name
@@ -137,7 +137,7 @@ python ./src/cli.py $VERBOSE --host $HOST --port $PORT products \
     --namespace "$NAMESPACE" \
     --name "$NAME"
 
-{"uuid": "c4c68ca9-a053-4878-acbf-7ee424ab11e6", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://bgssrv-dmproduct-0:8000", "createtimestamp": "2024-03-17 16:26:23.144", "updatetimestamp": "2024-03-17 16:26:23.144"}
+{"uuid": "c4c68ca9-a053-4878-acbf-7ee424ab11e6", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://osc-dm-product-srv-0:8000", "createtimestamp": "2024-03-17 16:26:23.144", "updatetimestamp": "2024-03-17 16:26:23.144"}
 ~~~~
 
 ### Viewing all Product in a Namespace
@@ -148,7 +148,7 @@ python ./src/cli.py $VERBOSE --host $HOST --port $PORT products \
     --retrieve \
     --namespace "$NAMESPACE"
 
-[{"uuid": "c4c68ca9-a053-4878-acbf-7ee424ab11e6", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://bgssrv-dmproduct-0:8000", "createtimestamp": "2024-03-17 16:26:23.144", "updatetimestamp": "2024-03-17 16:26:23.144"}]
+[{"uuid": "c4c68ca9-a053-4878-acbf-7ee424ab11e6", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://osc-dm-product-srv-0:8000", "createtimestamp": "2024-03-17 16:26:23.144", "updatetimestamp": "2024-03-17 16:26:23.144"}]
 ~~~~
 
 ### Discovering Product (directly to Product)
@@ -303,7 +303,7 @@ python ./src/cli.py $VERBOSE --host $HOST --port $PORT orders \
     --retrieve \
     --uuid "$ORDER_UUID"
 
-{"uuid": "d4ff42fd-4f7b-4ab5-840a-30d7c8ff8a23", "subscriber": "subscriber.user@brodagroupsoftware.com", "cart": {"uuid": "ab55bcdd-6a7e-4c7c-940b-9d1c198ffede", "subscriber": "subscriber.user@brodagroupsoftware.com", "items": [{"product": {"uuid": "c4c68ca9-a053-4878-acbf-7ee424ab11e6", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://bgssrv-dmproduct-0:8000", "createtimestamp": "2024-03-23 14:42:51.026", "updatetimestamp": "2024-03-23 14:42:51.026"}, "artifact": {"uuid": "cd9ac396-eff1-4c0c-afc7-001a98d36708", "productnamespace": "brodagroupsoftware.com", "productname": "rmi.dataproduct", "name": "Housing Units Income", "description": "Number of housing units and income by customer group for each utility.", "tags": ["utilities", "emissions"], "license": "Creative Commons 4.0", "securitypolicy": "public", "data": {"mimetype": "text/csv", "url": "https://utilitytransitionhub.rmi.org/static/data_download/housing_units_income.csv"}, "createtimestamp": null, "updatetimestamp": null}}], "createtimestamp": "2024-03-23 14:44:22.995", "updatetimestamp": "2024-03-23 14:44:22.995"}, "createtimestamp": "2024-03-23 14:44:22.995", "updatetimestamp": "2024-03-23 14:44:22.995"}
+{"uuid": "d4ff42fd-4f7b-4ab5-840a-30d7c8ff8a23", "subscriber": "subscriber.user@brodagroupsoftware.com", "cart": {"uuid": "ab55bcdd-6a7e-4c7c-940b-9d1c198ffede", "subscriber": "subscriber.user@brodagroupsoftware.com", "items": [{"product": {"uuid": "c4c68ca9-a053-4878-acbf-7ee424ab11e6", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://osc-dm-product-srv-0:8000", "createtimestamp": "2024-03-23 14:42:51.026", "updatetimestamp": "2024-03-23 14:42:51.026"}, "artifact": {"uuid": "cd9ac396-eff1-4c0c-afc7-001a98d36708", "productnamespace": "brodagroupsoftware.com", "productname": "rmi.dataproduct", "name": "Housing Units Income", "description": "Number of housing units and income by customer group for each utility.", "tags": ["utilities", "emissions"], "license": "Creative Commons 4.0", "securitypolicy": "public", "data": {"mimetype": "text/csv", "url": "https://utilitytransitionhub.rmi.org/static/data_download/housing_units_income.csv"}, "createtimestamp": null, "updatetimestamp": null}}], "createtimestamp": "2024-03-23 14:44:22.995", "updatetimestamp": "2024-03-23 14:44:22.995"}, "createtimestamp": "2024-03-23 14:44:22.995", "updatetimestamp": "2024-03-23 14:44:22.995"}
 ~~~~
 
 ### View a User's Order History
@@ -315,7 +315,7 @@ python ./src/cli.py $VERBOSE --host $HOST --port $PORT orders \
     --retrieve \
     --email "$EMAIL"
 
-[{"uuid": "d4ff42fd-4f7b-4ab5-840a-30d7c8ff8a23", "subscriber": "subscriber.user@brodagroupsoftware.com", "cart": {"uuid": "ab55bcdd-6a7e-4c7c-940b-9d1c198ffede", "subscriber": "subscriber.user@brodagroupsoftware.com", "items": [{"product": {"uuid": "c4c68ca9-a053-4878-acbf-7ee424ab11e6", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://bgssrv-dmproduct-0:8000", "createtimestamp": "2024-03-23 14:42:51.026", "updatetimestamp": "2024-03-23 14:42:51.026"}, "artifact": {"uuid": "cd9ac396-eff1-4c0c-afc7-001a98d36708", "productnamespace": "brodagroupsoftware.com", "productname": "rmi.dataproduct", "name": "Housing Units Income", "description": "Number of housing units and income by customer group for each utility.", "tags": ["utilities", "emissions"], "license": "Creative Commons 4.0", "securitypolicy": "public", "data": {"mimetype": "text/csv", "url": "https://utilitytransitionhub.rmi.org/static/data_download/housing_units_income.csv"}, "createtimestamp": null, "updatetimestamp": null}}], "createtimestamp": "2024-03-23 14:44:22.995", "updatetimestamp": "2024-03-23 14:44:22.995"}, "createtimestamp": "2024-03-23 14:44:22.995", "updatetimestamp": "2024-03-23 14:44:22.995"}]
+[{"uuid": "d4ff42fd-4f7b-4ab5-840a-30d7c8ff8a23", "subscriber": "subscriber.user@brodagroupsoftware.com", "cart": {"uuid": "ab55bcdd-6a7e-4c7c-940b-9d1c198ffede", "subscriber": "subscriber.user@brodagroupsoftware.com", "items": [{"product": {"uuid": "c4c68ca9-a053-4878-acbf-7ee424ab11e6", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://osc-dm-product-srv-0:8000", "createtimestamp": "2024-03-23 14:42:51.026", "updatetimestamp": "2024-03-23 14:42:51.026"}, "artifact": {"uuid": "cd9ac396-eff1-4c0c-afc7-001a98d36708", "productnamespace": "brodagroupsoftware.com", "productname": "rmi.dataproduct", "name": "Housing Units Income", "description": "Number of housing units and income by customer group for each utility.", "tags": ["utilities", "emissions"], "license": "Creative Commons 4.0", "securitypolicy": "public", "data": {"mimetype": "text/csv", "url": "https://utilitytransitionhub.rmi.org/static/data_download/housing_units_income.csv"}, "createtimestamp": null, "updatetimestamp": null}}], "createtimestamp": "2024-03-23 14:44:22.995", "updatetimestamp": "2024-03-23 14:44:22.995"}, "createtimestamp": "2024-03-23 14:44:22.995", "updatetimestamp": "2024-03-23 14:44:22.995"}]
 ~~~~
 
 ## Utility
@@ -325,7 +325,7 @@ Dump the registrar information:
 python ./src/cli.py $VERBOSE --host $HOST --port $PORT utility \
     --dump
 
-[{"key": "/products/324acdc7-96f7-477b-bd09-343335b7e423", "value": {"uuid": "324acdc7-96f7-477b-bd09-343335b7e423", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://bgssrv-dmproduct-0:8000", "createtimestamp": "2024-03-17 14:53:52.103", "updatetimestamp": "2024-03-17 14:53:52.103"}}, {"key": "/users/guest/d6e1fcc4-943a-491e-9dbb-a1ea190e9fb0", "value": {"uuid": "d6e1fcc4-943a-491e-9dbb-a1ea190e9fb0", "contact": {"name": "Guest User", "email": "guest.user@brodagroupsoftware.com", "phone": "+1 647.555.1212"}, "createtimestamp": "2024-03-17 14:53:27.378", "updatetimestamp": "2024-03-17 14:53:27.378", "role": "guest"}}]
+[{"key": "/products/324acdc7-96f7-477b-bd09-343335b7e423", "value": {"uuid": "324acdc7-96f7-477b-bd09-343335b7e423", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://osc-dm-product-srv-0:8000", "createtimestamp": "2024-03-17 14:53:52.103", "updatetimestamp": "2024-03-17 14:53:52.103"}}, {"key": "/users/guest/d6e1fcc4-943a-491e-9dbb-a1ea190e9fb0", "value": {"uuid": "d6e1fcc4-943a-491e-9dbb-a1ea190e9fb0", "contact": {"name": "Guest User", "email": "guest.user@brodagroupsoftware.com", "phone": "+1 647.555.1212"}, "createtimestamp": "2024-03-17 14:53:27.378", "updatetimestamp": "2024-03-17 14:53:27.378", "role": "guest"}}]
 ~~~~
 
 

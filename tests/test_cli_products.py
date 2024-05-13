@@ -22,7 +22,7 @@ HOST="localhost"
 PORT="20000"
 SAMPLES_DIR = os.environ.get("SAMPLES_DIR")
 DATAPRODUCT_DIR=os.path.join(SAMPLES_DIR, "dataproducts", "rmi")
-DATAPRODUCT_ADDRESS="http://bgssrv-dmproduct-0:8000"
+DATAPRODUCT_ADDRESS="http://osc-dm-product-srv-0:8000"
 
 
 #####

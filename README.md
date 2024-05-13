@@ -1,4 +1,4 @@
-# bgs-dm-mesh-cli - Ecosystem Platform Command Line Interface
+# osc-dm-mesh-cli - Ecosystem Platform Command Line Interface
 
 This is a command line interface (CLI) for
 Broda Group Software's Ecosystem Platform.
@@ -20,12 +20,12 @@ commands and parameters required to interact with the Ecosystem
 Platform.
 
 Full documentation is available in in the
-[bgs-dm-mesh-doc](https://github.com/brodagroupsoftware/bgs-dm-mesh-doc)
+[osc-dm-mesh-doc](https://github.com/brodagroupsoftware/osc-dm-mesh-doc)
 repo.
 
 This application interacts with other applications. You can run
 the full set of applications by following instructions in the
-[bgs-dm-mesh-doc](https://github.com/brodagroupsoftware/bgs-dm-mesh-doc)
+[osc-dm-mesh-doc](https://github.com/brodagroupsoftware/osc-dm-mesh-doc)
 repo.
 
 ## Prerequisites

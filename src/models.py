@@ -6,7 +6,7 @@
 #
 # Created:  2024-04-15 by eric.broda@brodagroupsoftware.com
 # NOTE: It is important to ensure this file is identical to that
-# in the bgssrv-dmregistry server models.py or you will
+# in the osc-dm-registrar-srv server models.py or you will
 # get 422 Unprocessed Entity errors
 
 from pydantic import BaseModel, HttpUrl, Field
