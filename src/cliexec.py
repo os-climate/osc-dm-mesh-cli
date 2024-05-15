@@ -27,6 +27,7 @@ ENDPOINT_PREFIX = "/api"
 REGISTRAR_API=ENDPOINT_PREFIX + "/registrar"
 SEARCH_API=ENDPOINT_PREFIX + "/search"
 DATAPRODUCT_API=ENDPOINT_PREFIX + "/dataproducts"
+MONITOR_API=ENDPOINT_PREFIX + "/monitor"
 
 # Set up logging
 # LOGGING_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
@@ -601,6 +602,29 @@ class CliExec():
         """Login status for an email"""
         logger.info(f"Show login status for email:{email}")
         service = REGISTRAR_API + f"/auth/status/{email}"
+        method = "GET"
+        response = await utilities.httprequest(self.host, self.port, service, method)
+        return response
+
+
+    #####
+    # MONITOR
+    #####
+
+
+    async def monitor_health(self):
+        """Monitor ecosystem platform health"""
+        logger.info("Monitor ecosystem platform health")
+        service = MONITOR_API + "/health"
+        method = "GET"
+        response = await utilities.httprequest(self.host, self.port, service, method)
+        return response
+
+
+    async def monitor_metrics(self):
+        """Monitor ecosystem platform metrics"""
+        logger.info("Monitor ecosystem platform metrics")
+        service = MONITOR_API + "/metrics"
         method = "GET"
         response = await utilities.httprequest(self.host, self.port, service, method)
         return response

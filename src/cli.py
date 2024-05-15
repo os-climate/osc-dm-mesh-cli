@@ -157,17 +157,6 @@ async def products(args: any):
         output = json.dumps(output)
         return output
 
-    # elif args.register:
-    #     if not args.directory:
-    #         usage("Missing 'directory' parameter")
-    #         sys.exit(STATUS_ARGUMENT_MISSING)
-    #     if not args.address:
-    #         usage("Missing 'address' parameter")
-    #         sys.exit(STATUS_ARGUMENT_MISSING)
-    #     output = await cliexec.deprecated_product_register(args.directory, args.address)
-    #     output = json.dumps(output)
-    #     return output
-
     elif args.retrieve:
         output = None
         if args.namespace and args.name:
@@ -420,6 +409,30 @@ async def auth(args: argparse.Namespace):
     return output
 
 
+async def monitor(args: argparse.Namespace):
+    logger.info(f"{args}")
+
+    if not is_valid_hostname(args.host):
+        usage("Invalid 'host' parameter")
+        sys.exit(STATUS_ARGUMENT_INVALID)
+    if not is_valid_port(args.port):
+        usage("Invalid 'port' parameter")
+        sys.exit(STATUS_ARGUMENT_INVALID)
+
+    cliexec = CliExec({
+        "host": args.host,
+        "port": args.port
+    })
+
+    output = None
+    if args.health:
+        output = await cliexec.monitor_health()
+    elif args.metrics:
+        output = await cliexec.monitor_metrics()
+    output = json.dumps(output)
+    return output
+
+
 async def usage(msg: str):
     msg = f"Error: {msg}\n"
     print(msg)
@@ -516,6 +529,13 @@ async def execute(xargs=None):
     auth_parser.add_argument("--email", help="Email of user")
     auth_parser.add_argument("--password", help="Password of user")
 
+    # Parser for 'monitor' command
+    monitor_parser = subparsers.add_parser("monitor", help="Monitor ecosystem platform components")
+    group = monitor_parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--health", action='store_true', help="Get health information")
+    group.add_argument("--metrics", action='store_true', help="Get metrics information")
+    monitor_parser.add_argument("--component", help="Name of the component")
+
     # Parse the arguments
     # args = parser.parse_args()
     args: argparse.Namespace = parser.parse_args(xargs if xargs is not None else sys.argv[1:])
@@ -548,6 +568,8 @@ async def execute(xargs=None):
         output = await carts(args)
     elif args.command == "orders":
         output = await orders(args)
+    elif args.command == "monitor":
+        output = await monitor(args)
 
     return output
 
