@@ -782,6 +782,20 @@ python ./src/cli.py $VERBOSE --host $HOST --port $PORT orders \
 [{"uuid": "c7cb0dd2-0cd4-4fc7-9faa-a547ee116a75", "subscriber": "subscriber.user@brodagroupsoftware.com", "cart": {"uuid": "ab55bcdd-6a7e-4c7c-940b-9d1c198ffede", "subscriber": "subscriber.user@brodagroupsoftware.com", "items": [{"product": {"uuid": "65bf83f8-3e00-4d7a-9553-db1491fd577c", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://bgssrv-dmproduct-0:8000", "createtimestamp": "2024-03-23 14:42:51.026", "updatetimestamp": "2024-03-23 14:42:51.026"}, "artifact": {"uuid": "e6ac3592-5764-443c-a45e-39c801f01e9a", "productnamespace": "brodagroupsoftware.com", "productname": "rmi.dataproduct", "name": "Housing Units Income", "description": "Number of housing units and income by customer group for each utility.", "tags": ["utilities", "emissions"], "license": "Creative Commons 4.0", "securitypolicy": "public", "data": {"mimetype": "text/csv", "url": "https://utilitytransitionhub.rmi.org/static/data_download/housing_units_income.csv"}, "createtimestamp": null, "updatetimestamp": null}}], "createtimestamp": "2024-03-23 14:44:22.995", "updatetimestamp": "2024-03-23 14:44:22.995"}, "createtimestamp": "2024-03-23 14:44:22.995", "updatetimestamp": "2024-03-23 14:44:22.995"}]
 ~~~~
 
+## Monitor Components
+
+To monitor ecosystem platform health:
+~~~~
+python ./src/cli.py $VERBOSE --host $HOST --port $PORT monitor \
+    --health
+~~~~
+
+To monitor ecosystem platform metrics:
+~~~~
+python ./src/cli.py $VERBOSE --host $HOST --port $PORT monitor \
+    --metrics
+~~~~
+
 
 ## Utility
 
