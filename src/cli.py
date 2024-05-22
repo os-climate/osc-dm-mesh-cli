@@ -33,7 +33,6 @@ STATUS_COMMAND_INVALID=102
 STATE_PARSER="parser"
 
 async def utility(args: argparse.Namespace):
-
     if not is_valid_hostname(args.host):
         usage("Invalid 'host' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
@@ -149,16 +148,29 @@ async def products(args: any):
         "port": args.port
     })
 
-    if args.generate:
+    if args.assign:
         if not args.directory:
             usage("Missing 'directory' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
-        output = await cliexec.product_generate(args.directory)
+        output = await cliexec.product_assign(args.directory)
         output = json.dumps(output)
         return output
 
+    elif args.generate:
+        if args.namespace:
+            output = await cliexec.product_generate(
+                args.directory, args.filename, args.namespace,
+                args.name, args.tags, args.description,
+                args.url, args.vendor, args.model)
+        else:
+            output = await cliexec.product_artifact_generate(
+                args.directory, args.filename, args.name,
+                args.tags, args.data, args.description,
+                args.url, args.vendor, args.model)
+
+        return output
+
     elif args.retrieve:
-        output = None
         if args.namespace and args.name:
             output = await cliexec.product_retrieve_name(args.namespace, args.name)
         elif args.namespace:
@@ -444,7 +456,7 @@ async def execute(xargs=None):
     """
     Main function that sets up the argparse CLI interface.
     """
-    # Initialize argparse and set general CLI description
+    logger.info("executing")    # Initialize argparse and set general CLI description
     parser = argparse.ArgumentParser(description="Data Mesh Database CLI")
     state.gstate(STATE_PARSER, parser)
 
@@ -458,6 +470,15 @@ async def execute(xargs=None):
 
     utility_parser = subparsers.add_parser("utility", help="Utility service")
     utility_parser.add_argument("--dump", action='store_true', help="Dump registrar")
+    utility_parser.add_argument("--generate", action='store_true', help="Dump registrar")
+    utility_parser.add_argument("--config", required=False, help="Dump registrar")
+    utility_parser.add_argument("--product", action='store_true', help="Dump registrar")
+    utility_parser.add_argument("--artifact", action='store_true', help="Dump registrar")
+    utility_parser.add_argument("--url", required=False, help="Dump registrar")
+    utility_parser.add_argument("--output_file", required=False, help="Dump registrar")
+    utility_parser.add_argument("--output_dir", required=False, help="Dump registrar")
+    utility_parser.add_argument("--namespace", required=False, help="Dump registrar")
+    utility_parser.add_argument("--tags", required=False, help="Dump registrar")
 
     users_parser = subparsers.add_parser("users", help="User information")
     group = users_parser.add_mutually_exclusive_group(required=True)
@@ -472,20 +493,29 @@ async def execute(xargs=None):
 
     products_parser = subparsers.add_parser("products", help="Register a data product")
     group = products_parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--generate", action='store_true', help="Generate UUIDs for products and artifacts")
+    group.add_argument("--assign", action='store_true', help="Assign UUIDs for products and artifacts")
+    group.add_argument("--generate", action='store_true', help="Generate product and artifact configuration")
     group.add_argument("--register", action='store_true', help="Register a product")
     group.add_argument("--update", action='store_true', help="Update a product")
     group.add_argument("--retrieve", action='store_true', help="Retrieve a product")
     group.add_argument("--discover", action='store_true', help="Discover a product (go directly to the data product)")
     group.add_argument("--search", action='store_true', help="Search for a product")
-    products_parser.add_argument("--directory", help="Directory containing product configuration")
+    products_parser.add_argument("--directory", help="Directory for product configuration data")
+    products_parser.add_argument("--filename", help="Filename containing product YAML configuration file")
     products_parser.add_argument("--address", help="Product IP address or DNS name")
     products_parser.add_argument("--namespace", help="Namespace for product")
     products_parser.add_argument("--name", help="Name for product")
+    products_parser.add_argument("--tags", help="Product tags")
+
+    products_parser.add_argument("--description", help="Product description")
+    products_parser.add_argument("--url", help="Product site reference URL (for generating descriptions)")
+    products_parser.add_argument("--data", help="Product site reference data")
     products_parser.add_argument("--uuid", help="UUID for product")
     products_parser.add_argument("--uuids", help="List of UUIDs for products")
     products_parser.add_argument("--email", help="Publisher email for product")
     products_parser.add_argument("--query", help="Query text")
+    products_parser.add_argument("--vendor", help="Model vendor (currently, only OpenAI is supported)")
+    products_parser.add_argument("--model", help="Model to use for generating description (must align to vendor)")
 
     artifacts_parser = subparsers.add_parser("artifacts", help="Artifact information")
     group = artifacts_parser.add_mutually_exclusive_group(required=True)

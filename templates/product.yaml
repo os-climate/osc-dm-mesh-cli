@@ -1,0 +1,10 @@
+product:
+    namespace: { namespace }
+    name: { name }
+    description: { description }
+    tags: { tags }
+    publisher: publisher.user@brodagroupsoftware.com
+    endpoints:
+        discovery: http://localhost:9999/discovery
+        observability: http://localhost:9999/observability
+        administration: http://localhost:9999/administration

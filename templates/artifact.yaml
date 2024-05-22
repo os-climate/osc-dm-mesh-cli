@@ -1,0 +1,16 @@
+artifact:
+  name: {name}
+  description: {description}
+  tags: {tags}
+  license: CDLA 2.0, Permissive, Version 2.0
+  securitypolicy: public
+  links:
+    - relationship: artifact
+      mimetype: text/csv
+      url: {url}
+    - relationship: sample
+      mimetype: text/csv
+      url: placeholder-sample.csv
+    - relationship: metadata
+      mimetype: application/json
+      url: placeholder-metadata.json

@@ -1,7 +1,7 @@
 # Temporary directories
 tmp/
 rawdata/
-
+/output
 # Other stuff
 *.iml
 
