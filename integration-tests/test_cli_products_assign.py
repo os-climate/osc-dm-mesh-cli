@@ -35,7 +35,7 @@ def test_cli_products_generate():
         "--host", HOST,
         "--port", PORT,
         "products",
-        "--generate",
+        "--assign",
         "--directory", DATAPRODUCT_DIR
     ])
     assert(result is not None)

@@ -1,0 +1,18 @@
+output_directory: ./output
+product:
+    url: https://data.catalyst.coop/pudl
+    name: product-001
+    namespace: pudl
+    tags:
+        - tag1
+        - tag2
+        - tag3
+artifacts:
+- url: https://data.catalyst.coop/pudl/core_eia__entity_plants.csv?_size=max
+  name: artifact-001
+- url: https://data.catalyst.coop/pudl/core_eia__entity_boilers
+  name: artifact-002
+- url: https://data.catalyst.coop/pudl/core_eia__entity_generators
+  name: artifact-003
+- url: https://data.catalyst.coop/pudl/core_eia__entity_utilities
+  name: artifact-004

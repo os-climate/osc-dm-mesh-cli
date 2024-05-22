@@ -18,9 +18,10 @@ import getpass
 parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent_dir)
 
-import utilities
 import models
 import constants
+from utl import httputilities
+from utl import product_generator
 from bgsexception import BgsException
 
 ENDPOINT_PREFIX = "/api"
@@ -57,7 +58,7 @@ class CliExec():
         logger.info("Dump registry")
         service = REGISTRAR_API + "/dump"
         method = "GET"
-        response = await utilities.httprequest(self.host, self.port, service, method)
+        response = await httputilities.httprequest(self.host, self.port, service, method)
         return response
 
 
@@ -89,7 +90,7 @@ class CliExec():
         service = REGISTRAR_API + "/users"
         method = "POST"
         headers = self._create_headers()
-        response = await utilities.httprequest(self.host, self.port, service, method, headers=headers, obj=user_dict)
+        response = await httputilities.httprequest(self.host, self.port, service, method, headers=headers, obj=user_dict)
         logger.info(f"Registering user name:{name} email:{email} phone:{phone}, response:{response}")
 
         return response
@@ -101,7 +102,7 @@ class CliExec():
         service = REGISTRAR_API + "/users"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         return response
 
@@ -112,7 +113,7 @@ class CliExec():
         service = REGISTRAR_API + f"/users/uuid/{uuid}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         return response
 
@@ -123,7 +124,7 @@ class CliExec():
         service = REGISTRAR_API + f"/users/email/{email}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         return response
 
@@ -134,7 +135,7 @@ class CliExec():
         service = REGISTRAR_API + f"/users/role/{role}/email/{email}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         return response
 
@@ -144,10 +145,33 @@ class CliExec():
     #####
 
 
-    async def product_generate(self, directory: str):
-        """Register data product directory"""
+    async def product_generate(
+            self, output_dir: str, file_name: str, namespace: str,
+            name: str, tags: str, description: str,
+            url: str, vendor: str, model: str):
 
-        logger.info(f"Registering directory (directory):{directory}")
+        response = product_generator.create_product_file(
+            output_dir, file_name, namespace, name,
+            tags, description, url, vendor, model)
+        return response
+
+
+    async def product_artifact_generate(
+            self, output_dir: str, file_name: str,
+            name: str, tags: str, data_url: str, description: str,
+            url: str, vendor: str, model: str):
+
+        response = product_generator.create_artifact_file(
+            output_dir, file_name, name,
+            tags, data_url, description,
+            url, vendor, model)
+        return response
+
+
+    async def product_assign(self, directory: str):
+        """Assign UUIDs to data products"""
+
+        logger.info(f"Assigning UUIDs directory (directory):{directory}")
 
         # Check if directory exists
         if not os.path.exists(directory):
@@ -216,7 +240,7 @@ class CliExec():
         with open(fqfilename, 'w') as file:
             file.write(details)
 
-        logger.info(f"Registering directory:{directory}, filename:{fqfilename} details:{details}")
+        logger.info(f"Assigning UUIDs directory:{directory}, filename:{fqfilename} details:{details}")
 
         response = {
             "uuids": fqfilename,
@@ -227,73 +251,13 @@ class CliExec():
         return response
 
 
-    async def deprecated_product_register(self, directory: str, address: str):
-        """Register data product directory"""
-
-        logger.info(f"Registering directory (directory):{directory}")
-
-        # Acquire the product UUIDs
-        filename = "uuids.yaml"
-        fqfilename = os.path.join(directory, filename)
-        uuids_dict = None
-        with open(fqfilename, 'r') as file:
-            uuids_dict = yaml.safe_load(file)
-
-        # Write the address to a YAML file (this a
-        # record for product owner for what they submitted)
-        filename = "registration.yaml"
-        fqfilename = os.path.join(directory, filename)
-
-        import getpass
-        registration_user = getpass.getuser()
-        registration_date = datetime.now().strftime("%d-%b-%Y %H:%M:%S %Z")
-        details = (
-            "##### \n"
-            "# \n"
-            "# Data Product Address Registration \n"
-            "# \n"
-            "# This file contains the address for your product \n"
-            "# \n"
-            "# ----- \n"
-            "# \n"
-            f"# Registered on: {registration_date} \n"
-            f"# Registered by: {registration_user} \n"
-            "# \n"
-            "##### \n"
-        )
-        details = details + f"address: {address}  \n"
-        logger.info(f"details:{details}")
-        with open(fqfilename, 'w') as file:
-            file.write(details)
-
-        product: models.Product = await self._load_product(directory)
-        product.uuid = uuids_dict["product_uuid"]
-        product.address = address
-
-        logger.info(f"Registering product:{product}")
-        product_dict = product.model_dump()
-
-        service = REGISTRAR_API + "/products"
-        method = "POST"
-        headers = self._create_headers()
-        xproduct = await utilities.httprequest(
-            self.host, self.port, service, method, headers=headers, obj=product_dict)
-        response = {
-            "product": xproduct,
-            "fqfilename": fqfilename
-        }
-
-        logger.info(f"Registering directory (directory):{directory}, response:{response}")
-        return response
-
-
     async def product_retrieve_all(self):
         """Retrieve all products"""
         logger.info("Retrieve all products")
         service = REGISTRAR_API + "/products"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Retrieve all products, response:{response}")
 
@@ -308,7 +272,7 @@ class CliExec():
         service = REGISTRAR_API + f"/products/namespace/{namespace}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Retrieve product namespace:{namespace}, response:{response}")
 
@@ -323,7 +287,7 @@ class CliExec():
         service = REGISTRAR_API + f"/products/namespace/{namespace}/name/{name}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Retrieve product namespace:{namespace} name:{name}, response:{response}")
 
@@ -338,7 +302,7 @@ class CliExec():
         service = REGISTRAR_API + f"/products/email/{email}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Retrieve product publisher email:{email}, response:{response}")
 
@@ -353,7 +317,7 @@ class CliExec():
         service = REGISTRAR_API + f"/products/uuid/{uuid}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Retrieve product uuid:{uuid}, response:{response}")
 
@@ -377,7 +341,7 @@ class CliExec():
         service = REGISTRAR_API + f"/products/uuids/"
         method = "POST"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers, obj=payload)
         logger.info(f"Retrieve product uuids:{uuids}, response:{response}")
 
@@ -390,7 +354,7 @@ class CliExec():
         service = DATAPRODUCT_API + f"/uuid/{uuid}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Discover product uuid:{uuid}, response:{response}")
         return response
@@ -424,7 +388,7 @@ class CliExec():
             "query": query
         }
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers, obj=request)
         logger.info(f"Search products query:{query}, response:{response}")
         return response
@@ -443,7 +407,7 @@ class CliExec():
         service = DATAPRODUCT_API + f"/uuid/{product_uuid}/artifacts"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Discover all artifacts for a product uuid:{product_uuid}, response:{response}")
 
@@ -458,7 +422,7 @@ class CliExec():
         service = DATAPRODUCT_API + f"/uuid/{product_uuid}/artifacts/{uuid}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Discover product product_uuid:{product_uuid} artifact uuid:{uuid}, response:{response}")
 
@@ -476,7 +440,7 @@ class CliExec():
         service = REGISTRAR_API + "/carts"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Retrieve all carts, response:{response}")
         return response
@@ -488,7 +452,7 @@ class CliExec():
         service = REGISTRAR_API + f"/carts/uuid/{uuid}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Retrieve cart uuid:{uuid}, response:{response}")
         return response
@@ -500,7 +464,7 @@ class CliExec():
         service = REGISTRAR_API + f"/carts/email/{email}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Retrieve cart publisher email:{email}, response:{response}")
         return response
@@ -514,7 +478,7 @@ class CliExec():
         method = "POST"
 
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Add cart uuid:{uuid} productuuid:{productuuid} artifactuuid:{artifactuuid}, response:{response}")
         return response
@@ -528,7 +492,7 @@ class CliExec():
         method = "DELETE"
 
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Remove cart uuid:{uuid} productuuid:{productuuid} artifactuuid:{artifactuuid}, response:{response}")
         return response
@@ -542,7 +506,7 @@ class CliExec():
         method = "POST"
 
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Retrieve cart email:{email}, response:{response}")
         return response
@@ -556,7 +520,7 @@ class CliExec():
         method = "DELETE"
 
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Retrieve cart email:{email}, response:{response}")
         return response
@@ -575,7 +539,7 @@ class CliExec():
         service = REGISTRAR_API + "/orders"
         method = "POST"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers, obj=request_dict)
         logger.info(f"Purchase cart cartuuid:{cartuuid}, response:{response}")
 
@@ -588,7 +552,7 @@ class CliExec():
         service = REGISTRAR_API + f"/orders/uuid/{uuid}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Retrieve order uuid:{uuid}, response:{response}")
         return response
@@ -600,7 +564,7 @@ class CliExec():
         service = REGISTRAR_API + f"/orders/email/{email}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         logger.info(f"Retrieve order email:{email}, response:{response}")
         return response
@@ -623,7 +587,7 @@ class CliExec():
         service = REGISTRAR_API + "/auth/login"
         method = "POST"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers, obj=payload)
         return response
 
@@ -639,7 +603,7 @@ class CliExec():
         service = REGISTRAR_API + "/auth/logout"
         method = "POST"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers, obj=payload)
         return response
 
@@ -650,7 +614,7 @@ class CliExec():
         service = REGISTRAR_API + "/auth/statistics"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         return response
 
@@ -661,7 +625,7 @@ class CliExec():
         service = REGISTRAR_API + f"/auth/status/{email}"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         return response
 
@@ -677,7 +641,7 @@ class CliExec():
         service = MONITOR_API + "/health"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         return response
 
@@ -688,7 +652,7 @@ class CliExec():
         service = MONITOR_API + "/metrics"
         method = "GET"
         headers = self._create_headers()
-        response = await utilities.httprequest(
+        response = await httputilities.httprequest(
             self.host, self.port, service, method, headers=headers)
         return response
 
@@ -696,6 +660,7 @@ class CliExec():
     #####
     # INTERNAL
     #####
+
 
     def _create_headers(self):
         headers = {

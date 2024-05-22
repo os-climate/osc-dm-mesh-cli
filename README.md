@@ -338,7 +338,7 @@ python ./src/cli.py $VERBOSE --host $HOST --port $PORT users \
 [{"uuid": "7eec771b-6140-4741-9845-2e52857c1cb3", "contact": {"name": "guest.user@brodagroupsoftware.com", "email": "Guest User", "phone": "+1 647.555.1212"}, "createtimestamp": "2024-03-17 15:24:07.411", "updatetimestamp": "2024-03-17 15:24:07.411", "role": "guest"}, {"uuid": "d6e1fcc4-943a-491e-9dbb-a1ea190e9fb0", "contact": {"name": "Guest User", "email": "guest.user@brodagroupsoftware.com", "phone": "+1 647.555.1212"}, "createtimestamp": "2024-03-17 14:53:27.378", "updatetimestamp": "2024-03-17 14:53:27.378", "role": "guest"}]
 ~~~~
 
-## Login / Logout and Statistics
+## Logging In/Out and Statistics
 
 To login a guest:
 ~~~~
@@ -391,7 +391,11 @@ Ecosystem Platform.  Once UUIDs have been generated then
 products can be registered.  Once registered products and
 their artifacts can be viewed.
 
-### Generating UUIDs for a Data Product
+### Generating a Data Product
+
+[Documentation for generating data products](/docs/product-generation.md)
+
+### Assigning UUIDs to a Data Product
 
 UUIDs are assigned by the data product owner.  To generate
 UUIDs, execute the following command:
@@ -399,7 +403,7 @@ UUIDs, execute the following command:
 ~~~~
 DATAPRODUCT_DIR="$SAMPLES_DIR/dataproducts/rmi";
 python ./src/cli.py $VERBOSE --host $HOST --port $PORT products \
-    --generate \
+    --assign \
     --directory "$DATAPRODUCT_DIR"
 
 {"uuids": "/Users/ericbroda/Development/scratch/bgsdat-samples/dataproducts/rmi/uuids.yaml", "product_uuid": "65bf83f8-3e00-4d7a-9553-db1491fd577c", "artifact_uuids": [{"Assets Earnings Investments": "0586c61c-9aac-4202-aeda-d3e3dfad384c"}, {"Customer Sales": "352a37b1-9fae-4df4-bcef-a5eb68bab9d4"}, {"Debit Equity Returns": "f47d3792-6995-4958-af38-3d7385632a32"}, {"Emissions Targets": "63071083-541b-472d-91ea-6325f214f2c8"}, {"Employees": "7ba33722-596c-493e-8c6f-58b1748f3de6"}, {"Expenditure Bills Burden": "6e889d55-ef19-4a4c-a3c9-c9fe2c9744fd"}, {"Expenditure Bills Burden Detail": "07497ece-7a47-4c4e-8fdb-409b3817e46c"}, {"Housing Units Income": "96bed246-1123-450a-aeea-94d72b9f7bc2"}, {"Net Plant Balance": "70177ae9-f886-496d-a9c8-82d483822e24"}, {"Operations Emissions by Fuel": "1a17518b-fb95-4573-831c-15218e2e8e90"}, {"Operations Emissions by Tech": "0f9b60cb-e18f-4e38-9e1f-cd890098d2e9"}, {"Revenue by Tech": "2bc48809-a916-43dc-bf82-907859e72bc2"}, {"State Targets": "d6b7a49d-9a3f-43e6-a56a-33795c7ffd30"}, {"State Utility Polcies": "423eb06b-cd79-4a52-a864-eca1f4ce79b8"}, {"Uneconomic Dispatch": "d81dcf27-7df3-4b80-8182-5dce58096f77"}, {"Utility Information": "e9273326-6848-4859-beb8-10c1949af89e"}, {"Utility State Map": "262fcfab-c06c-4559-ab1e-65bfd1903ddb"}]}
@@ -782,7 +786,7 @@ python ./src/cli.py $VERBOSE --host $HOST --port $PORT orders \
 [{"uuid": "c7cb0dd2-0cd4-4fc7-9faa-a547ee116a75", "subscriber": "subscriber.user@brodagroupsoftware.com", "cart": {"uuid": "ab55bcdd-6a7e-4c7c-940b-9d1c198ffede", "subscriber": "subscriber.user@brodagroupsoftware.com", "items": [{"product": {"uuid": "65bf83f8-3e00-4d7a-9553-db1491fd577c", "namespace": "brodagroupsoftware.com", "name": "rmi.dataproduct", "publisher": "publisher.user@brodagroupsoftware.com", "description": "US Utility data provided by RMI", "tags": ["utilities", "emissions"], "address": "http://bgssrv-dmproduct-0:8000", "createtimestamp": "2024-03-23 14:42:51.026", "updatetimestamp": "2024-03-23 14:42:51.026"}, "artifact": {"uuid": "e6ac3592-5764-443c-a45e-39c801f01e9a", "productnamespace": "brodagroupsoftware.com", "productname": "rmi.dataproduct", "name": "Housing Units Income", "description": "Number of housing units and income by customer group for each utility.", "tags": ["utilities", "emissions"], "license": "Creative Commons 4.0", "securitypolicy": "public", "data": {"mimetype": "text/csv", "url": "https://utilitytransitionhub.rmi.org/static/data_download/housing_units_income.csv"}, "createtimestamp": null, "updatetimestamp": null}}], "createtimestamp": "2024-03-23 14:44:22.995", "updatetimestamp": "2024-03-23 14:44:22.995"}, "createtimestamp": "2024-03-23 14:44:22.995", "updatetimestamp": "2024-03-23 14:44:22.995"}]
 ~~~~
 
-## Monitor Components
+## Monitoring Components
 
 To monitor ecosystem platform health:
 ~~~~
@@ -800,7 +804,7 @@ python ./src/cli.py $VERBOSE --host $HOST --port $PORT monitor \
 {"osc-dm-proxy-srv": {"osc-dm-search-srv": {"http://osc-dm-proxy-srv:8000/api/registrar/products": {"200": 9, "500": 1}, "http://osc-dm-proxy-srv:8000/api/proxy/health": {"200": 7}, "http://osc-dm-proxy-srv:8000/api/registrar/health": {"200": 7}, "http://osc-dm-proxy-srv:8000/api/search/health": {"503": 2, "200": 5}, "http://osc-dm-proxy-srv:8000/api/proxy/metrics": {"200": 6}, "http://osc-dm-proxy-srv:8000/api/registrar/metrics": {"200": 6}, "http://osc-dm-proxy-srv:8000/api/search/metrics": {"503": 2, "200": 4}, "http://osc-dm-proxy-srv:8000/api/dataproducts/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a/health": {"200": 5}, "http://osc-dm-proxy-srv:8000/api/dataproducts/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a/metrics": {"200": 4}}, "ericbroda": {"http://localhost:20000/api/registrar/users": {"200": 4}, "http://localhost:20000/api/registrar/users/uuid/b2c8fac1-0a6d-4632-902f-10986ab9bbce": {"200": 1}, "http://localhost:20000/api/registrar/users/email/guest.user@brodagroupsoftware.com": {"200": 1}, "http://localhost:20000/api/registrar/users/role/guest/email/guest.user@brodagroupsoftware.com": {"200": 1}, "http://localhost:20000/api/registrar/products": {"200": 4}, "http://localhost:20000/api/registrar/products/uuids/": {"200": 1}, "http://localhost:20000/api/registrar/products/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a": {"200": 1}, "http://localhost:20000/api/registrar/products/namespace/brodagroupsoftware.com/name/rmi.dataproduct": {"200": 1}, "http://localhost:20000/api/registrar/products/namespace/brodagroupsoftware.com": {"200": 1}, "http://localhost:20000/api/search/query": {"200": 1}, "http://localhost:20000/api/dataproducts/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a": {"200": 2}, "http://localhost:20000/api/dataproducts/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a/artifacts": {"200": 3}, "http://localhost:20000/api/dataproducts/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a/artifacts/2df6d005-8fb3-444c-b347-7bfc7ca541df": {"200": 2}, "http://localhost:20000/api/registrar/users/role/subscriber/email/subscriber.user@brodagroupsoftware.com": {"200": 1}, "http://localhost:20000/api/registrar/carts": {"200": 1}, "http://localhost:20000/api/registrar/carts/uuid/788122b1-9150-4e96-a1df-204ee06f8869": {"200": 1}, "http://localhost:20000/api/registrar/carts/email/subscriber.user@brodagroupsoftware.com": {"200": 1}, "http://localhost:20000/api/registrar/carts/uuid/788122b1-9150-4e96-a1df-204ee06f8869/b6e05972-fe25-44aa-b5a0-db6e100ca95a/2df6d005-8fb3-444c-b347-7bfc7ca541df": {"200": 3}, "http://localhost:20000/api/registrar/carts/email/subscriber.user@brodagroupsoftware.com/b6e05972-fe25-44aa-b5a0-db6e100ca95a/2df6d005-8fb3-444c-b347-7bfc7ca541df": {"200": 2}, "http://osc-dm-proxy-srv:8000/api/dataproducts/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a/artifacts/2df6d005-8fb3-444c-b347-7bfc7ca541df": {"200": 1}, "http://localhost:20000/api/registrar/orders": {"200": 1}, "http://localhost:20000/api/registrar/orders/uuid/764b3e72-d38b-4d66-8763-2c20e2f8cbb0": {"200": 1}, "http://localhost:20000/api/monitor/health": {"200": 2}, "http://localhost:20000/api/monitor/metrics": {"200": 2}}}, "osc-dm-registrar-srv": {"osc-dm-search-srv": {"http://osc-dm-proxy-srv:8000/api/registrar/products": {"200": 9, "500": 1}, "http://osc-dm-proxy-srv:8000/api/registrar/health": {"200": 7}, "http://osc-dm-proxy-srv:8000/api/registrar/metrics": {"200": 6}, "http://osc-dm-registrar-srv:8000/api/registrar/products": {"200": 6}, "http://osc-dm-registrar-srv:8000/api/registrar/products/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a": {"200": 9}}, "ericbroda": {"http://localhost:20000/api/registrar/users": {"200": 4}, "http://localhost:20000/api/registrar/users/uuid/b2c8fac1-0a6d-4632-902f-10986ab9bbce": {"200": 1}, "http://localhost:20000/api/registrar/users/email/guest.user@brodagroupsoftware.com": {"200": 1}, "http://localhost:20000/api/registrar/users/role/guest/email/guest.user@brodagroupsoftware.com": {"200": 1}, "http://localhost:20000/api/registrar/products": {"200": 4}, "http://localhost:20000/api/registrar/products/uuids/": {"200": 1}, "http://localhost:20000/api/registrar/products/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a": {"200": 1}, "http://localhost:20000/api/registrar/products/namespace/brodagroupsoftware.com/name/rmi.dataproduct": {"200": 1}, "http://localhost:20000/api/registrar/products/namespace/brodagroupsoftware.com": {"200": 1}, "http://osc-dm-registrar-srv:8000/api/registrar/products/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a": {"200": 8}, "http://localhost:20000/api/registrar/users/role/subscriber/email/subscriber.user@brodagroupsoftware.com": {"200": 1}, "http://localhost:20000/api/registrar/carts": {"200": 1}, "http://localhost:20000/api/registrar/carts/uuid/788122b1-9150-4e96-a1df-204ee06f8869": {"200": 1}, "http://localhost:20000/api/registrar/carts/email/subscriber.user@brodagroupsoftware.com": {"200": 1}, "http://localhost:20000/api/registrar/carts/uuid/788122b1-9150-4e96-a1df-204ee06f8869/b6e05972-fe25-44aa-b5a0-db6e100ca95a/2df6d005-8fb3-444c-b347-7bfc7ca541df": {"200": 3}, "http://localhost:20000/api/registrar/carts/email/subscriber.user@brodagroupsoftware.com/b6e05972-fe25-44aa-b5a0-db6e100ca95a/2df6d005-8fb3-444c-b347-7bfc7ca541df": {"200": 2}, "http://localhost:20000/api/registrar/orders": {"200": 1}, "http://localhost:20000/api/registrar/orders/uuid/764b3e72-d38b-4d66-8763-2c20e2f8cbb0": {"200": 1}}}, "osc-dm-search-srv": {"ericbroda": {"http://localhost:20000/api/search/query": {"200": 1}}, "osc-dm-search-srv": {"http://osc-dm-proxy-srv:8000/api/search/health": {"200": 5}, "http://osc-dm-proxy-srv:8000/api/search/metrics": {"200": 4}}}, "http://osc-dm-product-srv-0:8000": {"ericbroda": {"http://localhost:20000/api/dataproducts/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a": {"200": 1}, "http://localhost:20000/api/dataproducts/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a/artifacts": {"200": 1}, "http://localhost:20000/api/dataproducts/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a/artifacts/2df6d005-8fb3-444c-b347-7bfc7ca541df": {"200": 1}}, "osc-dm-search-srv": {"http://osc-dm-proxy-srv:8000/api/dataproducts/uuid/b6e05972-fe25-44aa-b5a0-db6e100ca95a/health": {"200": 1}}}}
 ~~~~
 
-## Utility
+## Utilities
 
 Dump the registrar information:
 ~~~~
@@ -828,52 +832,59 @@ section "Start Data Products").
 
 To test user registration capabilities:
 ~~~~
-pytest ./tests/test_cli_users.py
+pytest ./integration-tests/test_cli_users.py
 ~~~~
 
 ### Step 2: Run Auth Test Cases
 
 To test user authorization (login/out) capabilities:
 ~~~~
-pytest ./tests/test_cli_auth.py
+pytest ./integration-tests/test_cli_auth.py
 ~~~~
 
-### Step 3: Generate Product UUIDs
+### Step 3: Generate Product Configurations
 
-To test product UUID generation capabilities (note
+To test product configuration generation capabilities:
+~~~~
+pytest ./integration-tests/test_cli_products_generate.py
+~~~~
+
+### Step 4: Assign Product UUIDs
+
+To test product UUID assignment capabilities (note
 that you will need to remove the current data product
 "uuids.yaml" file or you will receive an error - if this
 file already exists then you can safely ignore this test):
 ~~~~
-pytest ./tests/test_cli_products_generate.py
+pytest ./integration-tests/test_cli_products_assign.py
 ~~~~
 
-### Step 4: Run Product Test Cases
+### Step 5: Run Product Test Cases
 
 To test product registration capabilities:
 ~~~~
-pytest ./tests/test_cli_products.py
+pytest ./integration-tests/test_cli_products.py
 ~~~~
 
-### Step 5: Run Product Discovery Test Cases
+### Step 6: Run Product Discovery Test Cases
 
 To test data product capabilities:
 ~~~~
-pytest ./tests/test_cli_discover.py
+pytest ./integration-tests/test_cli_discover.py
 ~~~~
 
-### Step 6: Run Cart and Order Test Cases
-
-To test carts and order management capabilities:
-~~~~
-pytest ./tests/test_cli_carts_orders.py
-~~~~
-
-### Step 7: Run Monitor (Health/Metrics) Test Cases
+### Step 7: Run Cart and Order Test Cases
 
 To test carts and order management capabilities:
 ~~~~
-pytest ./tests/test_cli_monitor.py
+pytest ./integration-tests/test_cli_carts_orders.py
+~~~~
+
+### Step 8: Run Monitor (Health/Metrics) Test Cases
+
+To test carts and order management capabilities:
+~~~~
+pytest ./integration-tests/test_cli_monitor.py
 ~~~~
 
 
