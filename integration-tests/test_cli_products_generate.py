@@ -24,7 +24,7 @@ PORT="20000"
 #     --directory "$OUTPUT_DIRECTORY" \
 #     --filename "$PRODUCT_YAML"
 def test_generate_product_manual():
-    TAGS = "tag1,tag2,tag3"
+    TAGS = "population,buildings"
     NAMESPACE = "test-space"
     NAME = "test-name"
     DIRECTORY = "./output"
@@ -65,7 +65,7 @@ def test_generate_product_manual():
 #     --directory "$OUTPUT_DIRECTORY" \
 #     --filename "$PRODUCT_YAML"
 def test_generate_product_llm():
-    TAGS = "tag1,tag2,tag3"
+    TAGS = "population,buildings"
     NAMESPACE = "test-space"
     NAME = "test-name"
     DIRECTORY = "./output"
@@ -107,7 +107,7 @@ def test_generate_product_llm():
 #     --directory "$OUTPUT_DIRECTORY" \
 #     --filename "$ARTIFACT_YAML"
 def test_generate_product_artifact_manual():
-    TAGS = "tag1,tag2,tag3"
+    TAGS = "population,buildings"
     NAME = "test-name"
     URL = "https://data.catalyst.coop/pudl/core_eia__entity_plants"
     DATA_URL = URL + ".csv?_size=max"
@@ -130,6 +130,60 @@ def test_generate_product_artifact_manual():
     result = json.loads(result)
     assert "artifact" in result
 
+
+# ARTIFACT_TYPE="service" ;
+# NAME="artifact-001" ;
+# TAGS="population,buildings" ;
+# DESCRIPTION="Some short description" ;
+# DATA_URL="https://data.catalyst.coop/pudl/core_eia__entity_plants.csv?_size=max" ;
+# OUTPUT_DIRECTORY="./output" ;
+# ARTIFACT_YAML="$NAME.yaml" ;
+# SERVICE_HOST="localhost" ;
+# SERVICE_PORT="2000" ;
+# python ./src/cli.py $VERBOSE --host $HOST --port $PORT products \
+#     --generate \
+#     --name "$NAME" \
+#     --tags "$TAGS" \
+#     --data "$DATA_URL" \
+#     --description "$DESCRIPTION" \
+#     --directory "$OUTPUT_DIRECTORY" \
+#     --filename "$ARTIFACT_YAML" \
+#     --service_host "$SERVICE_HOST" \
+#     --service_port "$SERVICE_PORT" \
+def test_generate_product_artifact_manual_with_service():
+    ARTIFACT_TYPE = "service"
+    TAGS = "population,buildings"
+    NAME = "test-name"
+    URL = "https://data.catalyst.coop/pudl/core_eia__entity_plants"
+    DATA_URL = URL + ".csv?_size=max"
+    DESCRIPTION = "Some short description"
+    DIRECTORY = "./output"
+    FILENAME = NAME + ".yaml"
+    SERVICE_HOST = "localhost"
+    SERVICE_PORT="2000"
+    result = main([
+        "--host", HOST,
+        "--port", PORT,
+        "products",
+        "--generate",
+        "--type", ARTIFACT_TYPE,
+        "--name", NAME,
+        "--tags", TAGS,
+        "--data", DATA_URL,
+        "--description", DESCRIPTION,
+        "--directory", DIRECTORY,
+        "--filename", FILENAME,
+        "--service_host", SERVICE_HOST,
+        "--service_port", SERVICE_PORT
+    ])
+    print(result)
+    assert(result is not None)
+    result = json.loads(result)
+    assert "artifact" in result
+
+
+
+
 # NAME="artifact-001" ;
 # TAGS="utilities,emissions" ;
 # URL="https://data.catalyst.coop/pudl/core_eia__entity_plants" ;
@@ -149,7 +203,7 @@ def test_generate_product_artifact_manual():
 #     --directory "$OUTPUT_DIRECTORY" \
 #     --filename "$ARTIFACT_YAML"
 def test_generate_product_artifact_ai():
-    TAGS = "tag1,tag2,tag3"
+    TAGS = "population,buildings"
     NAME = "test-name"
     URL = "https://data.catalyst.coop/pudl/core_eia__entity_plants"
     DATA_URL = URL + ".csv?_size=max"
