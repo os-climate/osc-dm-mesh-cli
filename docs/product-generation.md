@@ -86,7 +86,7 @@ this case we will provide a description:
 ~~~~
 NAMESPACE="dummyvalue.com" ;
 NAME="rmi.dataproduct" ;
-TAGS="utilities,emissions" ;
+TAGS="population,buildings" ;
 DESCRIPTION="Some short description" ;
 DATA_URL="Some data url" ;
 OUTPUT_DIRECTORY="./output" ;

@@ -34,10 +34,10 @@ STATE_PARSER="parser"
 
 async def utility(args: argparse.Namespace):
     if not is_valid_hostname(args.host):
-        usage("Invalid 'host' parameter")
+        await usage("Invalid 'host' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
     if not is_valid_port(args.port):
-        usage("Invalid 'port' parameter")
+        await usage("Invalid 'port' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
 
     cliexec = CliExec({
@@ -50,7 +50,7 @@ async def utility(args: argparse.Namespace):
         output = json.dumps(output)
         return output
     else:
-        usage("Unrecognized command")
+        await usage("Missing argument dump")
         sys.exit(STATUS_COMMAND_INVALID)
 
 
@@ -61,10 +61,10 @@ async def users(args: argparse.Namespace):
     logger.info(f"{args}")
 
     if not is_valid_hostname(args.host):
-        usage("Invalid 'host' parameter")
+        await usage("Invalid 'host' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
     if not is_valid_port(args.port):
-        usage("Invalid 'port' parameter")
+        await usage("Invalid 'port' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
 
     cliexec = CliExec({
@@ -74,16 +74,16 @@ async def users(args: argparse.Namespace):
 
     if args.register:
         if not args.role:
-            usage("Missing 'role' parameter")
+            await usage("Missing 'role' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.name:
-            usage("Missing 'name' parameter")
+            await usage("Missing 'name' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.email:
-            usage("Missing 'email' parameter")
+            await usage("Missing 'email' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.phone:
-            usage("Missing 'phone' parameter")
+            await usage("Missing 'phone' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         else:
             logger.info("Executing create for new user")
@@ -108,16 +108,16 @@ async def users(args: argparse.Namespace):
     # COMPLETE THIS!
     elif args.update:
         if not args.uuid:
-            usage("Missing 'uuid' parameter")
+            await usage("Missing 'uuid' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.name:
-            usage("Missing 'name' parameter")
+            await usage("Missing 'name' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.email:
-            usage("Missing 'email' parameter")
+            await usage("Missing 'email' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.phone:
-            usage("Missing 'phone' parameter")
+            await usage("Missing 'phone' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
 
         # Convert tags from comma delimted string to List[str]
@@ -126,7 +126,7 @@ async def users(args: argparse.Namespace):
         return output
 
     else:
-        usage("Unrecognized command")
+        await usage("Unrecognized command")
         sys.exit(STATUS_COMMAND_INVALID)
 
 
@@ -137,10 +137,10 @@ async def products(args: any):
     logger.info(f"{args}")
 
     if not is_valid_hostname(args.host):
-        usage("Invalid 'host' parameter")
+        await usage("Invalid 'host' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
     if not is_valid_port(args.port):
-        usage("Invalid 'port' parameter")
+        await usage("Invalid 'port' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
 
     cliexec = CliExec({
@@ -150,7 +150,7 @@ async def products(args: any):
 
     if args.assign:
         if not args.directory:
-            usage("Missing 'directory' parameter")
+            await usage("Missing 'directory' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         output = await cliexec.product_assign(args.directory)
         output = json.dumps(output)
@@ -166,7 +166,7 @@ async def products(args: any):
             output = await cliexec.product_artifact_generate(
                 args.directory, args.filename, args.name,
                 args.tags, args.data, args.description,
-                args.url, args.vendor, args.model)
+                args.url, args.vendor, args.model, args.type, host=args.service_host, port=args.service_port)
 
         return output
 
@@ -188,7 +188,7 @@ async def products(args: any):
 
     elif args.discover:
         if not args.uuid:
-            usage("Missing 'uuid' parameter")
+            await usage("Missing 'uuid' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
 
         output = await cliexec.product_discover_uuid(args.uuid)
@@ -197,7 +197,7 @@ async def products(args: any):
 
     elif args.search:
         if not args.query:
-            usage("Missing 'query' parameter")
+            await usage("Missing 'query' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         output = await cliexec.product_search(args.query)
         output = json.dumps(output)
@@ -206,19 +206,19 @@ async def products(args: any):
     # COMPLETE THIS
     elif args.update:
         if not args.namespace:
-            usage("Missing 'namespace' parameter")
+            await usage("Missing 'namespace' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.name:
-            usage("Missing 'name' parameter")
+            await usage("Missing 'name' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.publisher:
-            usage("Missing 'publisher' parameter")
+            await usage("Missing 'publisher' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.description:
-            usage("Missing 'description' parameter")
+            await usage("Missing 'description' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.tags:
-            usage("Missing 'tags' parameter")
+            await usage("Missing 'tags' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
 
         # Convert tags from comma delimted string to List[str]
@@ -230,7 +230,8 @@ async def products(args: any):
         return output
 
     else:
-        usage("Unrecognized command")
+        print(f"")
+        await usage("Unrecognized command")
         sys.exit(STATUS_COMMAND_INVALID)
 
 
@@ -241,10 +242,10 @@ async def artifacts(args: argparse.Namespace):
     logger.info(f"{args}")
 
     if not is_valid_hostname(args.host):
-        usage("Invalid 'host' parameter")
+        await usage("Invalid 'host' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
     if not is_valid_port(args.port):
-        usage("Invalid 'port' parameter")
+        await usage("Invalid 'port' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
 
     cliexec = CliExec({
@@ -262,7 +263,7 @@ async def artifacts(args: argparse.Namespace):
         return output
 
     else:
-        usage("Unrecognized command")
+        await usage("Unrecognized command")
         sys.exit(STATUS_COMMAND_INVALID)
 
 
@@ -273,10 +274,10 @@ async def carts(args: argparse.Namespace):
     logger.info(f"{args}")
 
     if not is_valid_hostname(args.host):
-        usage("Invalid 'host' parameter")
+        await usage("Invalid 'host' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
     if not is_valid_port(args.port):
-        usage("Invalid 'port' parameter")
+        await usage("Invalid 'port' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
 
     cliexec = CliExec({
@@ -286,10 +287,10 @@ async def carts(args: argparse.Namespace):
 
     if args.add:
         if not args.productuuid :
-            usage("Missing 'productuuid' parameter")
+            await usage("Missing 'productuuid' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.artifactuuid:
-            usage("Missing 'artifactuuid' parameter")
+            await usage("Missing 'artifactuuid' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
 
         output = None
@@ -302,10 +303,10 @@ async def carts(args: argparse.Namespace):
 
     elif args.remove:
         if not args.productuuid :
-            usage("Missing either 'productuuid' parameter")
+            await usage("Missing either 'productuuid' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.artifactuuid:
-            usage("Missing either 'artifactuuid' parameter")
+            await usage("Missing either 'artifactuuid' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
 
         output = None
@@ -328,7 +329,7 @@ async def carts(args: argparse.Namespace):
         return output
 
     else:
-        usage("Unrecognized command")
+        await usage("Unrecognized command")
         sys.exit(STATUS_COMMAND_INVALID)
 
 
@@ -339,10 +340,10 @@ async def orders(args: argparse.Namespace):
     logger.info(f"{args}")
 
     if not is_valid_hostname(args.host):
-        usage("Invalid 'host' parameter")
+        await usage("Invalid 'host' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
     if not is_valid_port(args.port):
-        usage("Invalid 'port' parameter")
+        await usage("Invalid 'port' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
 
     cliexec = CliExec({
@@ -352,7 +353,7 @@ async def orders(args: argparse.Namespace):
 
     if args.purchase:
         if not args.cartuuid:
-            usage("Missing 'cartuuid' parameter")
+            await usage("Missing 'cartuuid' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         else:
             logger.info("Executing create for new order")
@@ -371,7 +372,7 @@ async def orders(args: argparse.Namespace):
         return output
 
     else:
-        usage("Unrecognized command")
+        await usage("Unrecognized command")
         sys.exit(STATUS_COMMAND_INVALID)
 
 
@@ -379,10 +380,10 @@ async def auth(args: argparse.Namespace):
     logger.info(f"{args}")
 
     if not is_valid_hostname(args.host):
-        usage("Invalid 'host' parameter")
+        await usage("Invalid 'host' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
     if not is_valid_port(args.port):
-        usage("Invalid 'port' parameter")
+        await usage("Invalid 'port' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
 
     cliexec = CliExec({
@@ -395,26 +396,26 @@ async def auth(args: argparse.Namespace):
         output = await cliexec.auth_statistics()
     elif args.status:
         if not args.email:
-            usage("Missing 'email' parameter")
+            await usage("Missing 'email' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         output = await cliexec.auth_status(args.email)
     elif args.login:
         if not args.email:
-            usage("Missing 'email' parameter")
+            await usage("Missing 'email' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.role:
-            usage("Missing 'role' parameter")
+            await usage("Missing 'role' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.password:
-            usage("Missing 'password' parameter")
+            await usage("Missing 'password' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         output = await cliexec.auth_login_user(args.role, args.email, args.password)
     elif args.logout:
         if not args.email:
-            usage("Missing 'email' parameter")
+            await usage("Missing 'email' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         if not args.role:
-            usage("Missing 'role' parameter")
+            await usage("Missing 'role' parameter")
             sys.exit(STATUS_ARGUMENT_MISSING)
         output = await cliexec.auth_logout_user(args.role, args.email)
     output = json.dumps(output)
@@ -425,10 +426,10 @@ async def monitor(args: argparse.Namespace):
     logger.info(f"{args}")
 
     if not is_valid_hostname(args.host):
-        usage("Invalid 'host' parameter")
+        await usage("Invalid 'host' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
     if not is_valid_port(args.port):
-        usage("Invalid 'port' parameter")
+        await usage("Invalid 'port' parameter")
         sys.exit(STATUS_ARGUMENT_INVALID)
 
     cliexec = CliExec({
@@ -516,6 +517,12 @@ async def execute(xargs=None):
     products_parser.add_argument("--query", help="Query text")
     products_parser.add_argument("--vendor", help="Model vendor (currently, only OpenAI is supported)")
     products_parser.add_argument("--model", help="Model to use for generating description (must align to vendor)")
+    # Used for the artifact generation
+    products_parser.add_argument("--type", help="type of artifact being generated (service)")
+    products_parser.add_argument("--service_host", help="Model to use for generating description (must align to vendor)")
+    products_parser.add_argument("--service_port", help="Model to use for generating description (must align to vendor)")
+
+
 
     artifacts_parser = subparsers.add_parser("artifacts", help="Artifact information")
     group = artifacts_parser.add_mutually_exclusive_group(required=True)

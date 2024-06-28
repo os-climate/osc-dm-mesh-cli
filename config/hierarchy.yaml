@@ -1,0 +1,83 @@
+Hazard:
+- river-flooding:
+    Name: River Flooding
+    Description: test
+- coastal-flooding:
+    Name: River Flooding
+    Description: test
+- tropical-cyclones-storm:
+    Name: Tropical Cyclones (STORM)
+    Description: test
+- tropical-cyclones-iris:
+    Name: Tropical Cyclones (IRIS)
+    Description: test
+- cooling-degree-days:
+    Name: Cooling Degree Days
+    Description: test
+- extreme-heat:
+    Name: Extreme Heat
+    Description: test
+- droughts:
+    Name: Droughts
+    Description: test
+- earthquakes:
+    Name: Earthquakes
+    Description: test
+- wildfires:
+    Name: Wildfires
+    Description: test
+
+
+Exposure:
+- population:
+      Name: Population
+      Description: test
+- buildings:
+      Name: Buildings
+      Description: test
+- infrastructure:
+      Name: Infrastructure
+      Description: test
+- industry:
+      Name: Industry
+      Description: test
+- healthcare:
+      Name: Healthcare
+      Description: test
+- land-cover:
+      Name: Land Cover
+      Description: test
+- topography:
+      Name: Topography
+      Description: test
+- soil-organic-carbon:
+      Name: Soil Organic Carbon
+      Description: test
+
+Vulnerability:
+- human-development:
+      Name: Human Development
+      Description: test
+- travel-time-to-healthcare:
+      Name: Travel Time to Healthcare
+      Description: test
+- biodiversity-intactness:
+      Name: Biodiversity Intactness
+      Description: test
+- forest-landscape-integrity:
+      Name: Forest Landscape Integrity
+      Description: test
+- protected-areas-wdpa:
+      Name: Protected Areas (WDPA)
+      Description: test
+
+Risk:
+- population-exposure:
+      Name: Population Exposure
+      Description: test
+- infrastructure-risk:
+      Name: Infrastructure Risk
+      Description: test
+- regional-summary:
+      Name: Regional Summary
+      Description: test

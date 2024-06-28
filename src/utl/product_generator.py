@@ -5,6 +5,7 @@ import json
 
 from utl.webscraper import WebScraper
 from utl.openaillm import OpenAIClient
+from utl.tag_generator import _create_tags
 from bgsexception import BgsException
 
 logger = logging.getLogger(__name__)
@@ -32,19 +33,46 @@ def _create_description(vendor, model, url: str):
 
 def create_product_file(
         output_dir: str, file_name: str, namespace: str, name: str,
-        tags: str, description: str, url: str, vendor: str, model: str):
-
-    if not description:
-        description = _create_description(vendor, model, url)
-
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+        tags: str | None, description: str | None, url: str, vendor: str, model: str):
 
     with open('./templates/product.yaml', 'r') as file:
         contents = yaml.safe_load(file)
 
+    if not description:
+        description = _create_description(vendor, model, url)
+
+    hierarchy_file = "./config/hierarchy.yaml"
+    with open(hierarchy_file, 'r') as file:
+        hierarchy_contents = yaml.safe_load(file)
+
+    available_tags = []
+    # TODO do this with list comprehension
+    for val in [*hierarchy_contents.values()]:
+        for element in val:
+            available_tags.extend(element.keys())
+
+    if tags is None:
+        tags = _create_tags(description, available_tags, vendor=vendor, model=model)
+        tags = tags.strip().split(",")
+    else:
+
+        tags = tags.strip().split(",")
+        with open(hierarchy_file, 'r') as file:
+            hierarchy = yaml.safe_load(file)
+
+        tags_hierarchy = []
+        for val in [*hierarchy.values()]:
+            for element in val:
+                tags_hierarchy.extend(element.keys())
+        for val in tags:
+            if val not in tags_hierarchy:
+                raise Exception(f"invalid tag: {val}")
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
     contents["product"]["description"] = description
-    contents["product"]["tags"] = tags.strip().split(",")
+    contents["product"]["tags"] = tags
     contents["product"]["name"] = name
     contents["product"]["namespace"] = namespace
 
@@ -58,7 +86,36 @@ def create_product_file(
 
 def create_artifact_file(
         output_dir: str, file_name: str, name: str, tags: str,
-        data_url: str, description: str, url: str, vendor: str, model: str):
+        data_url: str, description: str, url: str, vendor: str, model: str,
+        artifact_type: str, host=None, port=None):
+
+    hierarchy_file = "./config/hierarchy.yaml"
+    with open(hierarchy_file, 'r') as file:
+        hierarchy_contents = yaml.safe_load(file)
+
+    available_tags = []
+    # TODO do this with list comprehension
+    for val in [*hierarchy_contents.values()]:
+        for element in val:
+            available_tags.extend(element.keys())
+
+    if tags is None:
+        tags = _create_tags(description, available_tags, vendor=vendor, model=model)
+        tags = tags.strip().split(",")
+    else:
+
+        tags = tags.strip().split(",")
+        with open(hierarchy_file, 'r') as file:
+            hierarchy = yaml.safe_load(file)
+
+        tags_hierarchy = []
+        for val in [*hierarchy.values()]:
+            for element in val:
+                tags_hierarchy.extend(element.keys())
+
+        for val in tags:
+            if val not in tags_hierarchy:
+                raise Exception(f"invalid tag: {val}")
 
     if not description:
         description = _create_description(vendor, model, url)
@@ -74,10 +131,15 @@ def create_artifact_file(
         contents = yaml.safe_load(file)
 
     contents["artifact"]["description"] = description
-    contents["artifact"]["tags"] = tags.strip().split(",")
+    contents["artifact"]["tags"] = tags
     contents["artifact"]["name"] = name
     contents["artifact"]["links"][0]["url"] = data_url
 
+
+    if artifact_type == "service":
+        contents["service"] = {}
+        contents["service"]["host"] = host
+        contents["service"]["port"] = port
     fqpath = os.path.join(artifacts_dir, file_name)
     with open(fqpath, 'w') as file:
         yaml.dump(contents, file)
@@ -85,4 +147,3 @@ def create_artifact_file(
     output = {"artifact": fqpath}
     output = json.dumps(output)
     return output
-
