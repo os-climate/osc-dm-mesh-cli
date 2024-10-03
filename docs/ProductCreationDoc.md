@@ -208,9 +208,23 @@ artifact_uuids:
 from the CLI terminal, generate the users with the following command
 this is only needed if you want to view your product from the CLI.
 ~~~
-ROLE="Subscriber" ;
+ROLE="subscriber" ;
 GUEST_EMAIL="subscriber.user@brodagroupsoftware.com" ;
 NAME="Subscriber User" ;
+PHONE="+1 647.555.1212" ;
+python ./src/cli.py $VERBOSE --host $HOST --port $PORT users \
+    --register \
+    --role "$ROLE" \
+    --name "$NAME" \
+    --email "$GUEST_EMAIL" \
+    --phone "$PHONE"
+~~~
+
+additionally, you will have to create a publisher user.
+~~~
+ROLE="publisher" ;
+GUEST_EMAIL="publisher.user@brodagroupsoftware.com" ;
+NAME="Publisher User" ;
 PHONE="+1 647.555.1212" ;
 python ./src/cli.py $VERBOSE --host $HOST --port $PORT users \
     --register \
